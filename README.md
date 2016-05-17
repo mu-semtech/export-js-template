@@ -3,7 +3,7 @@
 [![Test Coverage](https://codeclimate.com/github/mu-semtech/export-template/badges/coverage.svg)](https://codeclimate.com/github/mu-semtech/export-template/coverage)
 [![Issue Count](https://codeclimate.com/github/mu-semtech/export-template/badges/issue_count.svg)](https://codeclimate.com/github/mu-semtech/export-template)
 
-Mu Construct Template
-=====================
+Export Template
+===============
 
-Template for a microservice that runs CONTRUCT queries.
+Microservice to export data using custom defined SPARQL queries.

@@ -1,7 +1,7 @@
 {
   "name": "mu-construct-template",
   "version": "1.0.0",
-  "description": "Template for a microservice that runs CONTRUCT queries",
+  "description": "Microservice to export data using custom defined SPARQL queries",
   "main": "src/index.js",
   "standard": {
     "parser": "babel-eslint",
