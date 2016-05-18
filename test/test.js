@@ -1,7 +1,11 @@
-import {expect} from 'chai'
+import chai from 'chai'
+import chaiAsPromised from 'chai-as-promised'
 import Hapi from 'hapi'
 import parallel from 'mocha.parallel'
 import routes from '../src/routes'
+
+chai.use(chaiAsPromised)
+const expect = chai.expect
 
 /*
  * NOTE: you should use parallel here and not describe, otherwise the
@@ -11,11 +15,10 @@ import routes from '../src/routes'
  *
  */
 
-const graph = process.env.MU_APPLICATION_GRAPH !== undefined
-  ? process.env.MU_APPLICATION_GRAPH
-  : 'http://mu.semte.ch/application'
+const graph = 'http://mu.semte.ch/application'
 
 parallel('mu-semtech-template', () => {
+  let server
   const endpointUrl = 'http://mu.semte.ch/application'
   const request = (method, url, headers, content, callback) => {
     callback(null, {
@@ -26,43 +29,39 @@ parallel('mu-semtech-template', () => {
       statusCode: 200
     })
   }
-  const plugin = {
-    register: require('hapi-sparql'),
-    options: {
-      request,
-      endpointUrl
+  const plugins = [
+    {
+      register: require('hapi-sparql'),
+      options: {
+        request,
+        endpointUrl
+      }
     }
-  }
+  ]
 
-  it('constructs with example1', (done) => {
-    const server = new Hapi.Server()
+  before(async () => {
+    server = new Hapi.Server({debug: {request: []}})
     server.connection({})
-    server.register(plugin, (err) => {
-      expect(err).to.be.not.ok
-      server.route(routes)
-      server.inject('/example1', (res) => {
-        expect(res.statusCode).to.be.equal(200)
-        expect(res.result.method).to.be.equal('GET')
-        expect(res.result.url).to.be.equal(endpointUrl + '?query=' +
-          encodeURIComponent('CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}'))
-        done()
+    await server.register(plugins)
+      .then((err) => {
+        expect(err).to.be.not.ok
+        server.route(routes)
       })
-    })
   })
 
-  it('constructs with example2', (done) => {
-    const server = new Hapi.Server()
-    server.connection({})
-    server.register(plugin, (err) => {
-      expect(err).to.be.not.ok
-      server.route(routes)
-      server.inject('/example2', (res) => {
-        expect(res.statusCode).to.be.equal(200)
-        expect(res.result.method).to.be.equal('GET')
-        expect(res.result.url).to.be.equal(endpointUrl + '?query=' +
+  it('constructs with example1', () => {
+    return expect(server.inject('/example1'))
+      .to.eventually.be.fulfilled
+      .to.eventually.have.deep.property('result.url')
+      .to.eventually.be.equal(endpointUrl + '?query=' +
+        encodeURIComponent('CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o}'))
+  })
+
+  it('constructs with example2', () => {
+    return expect(server.inject('/example2'))
+      .to.eventually.be.fulfilled
+      .to.eventually.have.deep.property('result.url')
+      .to.eventually.be.equal(endpointUrl + '?query=' +
           encodeURIComponent(`CONSTRUCT {?s ?p ?o} FROM <${graph}> WHERE {?s ?p ?o}`))
-        done()
-      })
-    })
   })
 })
