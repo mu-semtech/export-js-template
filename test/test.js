@@ -2,7 +2,7 @@ import chai from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import Hapi from 'hapi'
 import parallel from 'mocha.parallel'
-import routes from '../src/routes'
+import src from '../src'
 
 chai.use(chaiAsPromised)
 const expect = chai.expect
@@ -36,7 +36,8 @@ parallel('mu-semtech-template', () => {
         request,
         endpointUrl
       }
-    }
+    },
+    src
   ]
 
   before(async () => {
@@ -45,7 +46,6 @@ parallel('mu-semtech-template', () => {
     await server.register(plugins)
       .then((err) => {
         expect(err).to.be.not.ok
-        server.route(routes)
       })
   })
 

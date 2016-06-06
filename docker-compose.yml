@@ -2,4 +2,4 @@ version: "2"
 services:
 
   template:
-    image: semtech/export-template:latest
+    image: semtech/mu-export-template:latest
