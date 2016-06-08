@@ -64,4 +64,11 @@ parallel('mu-semtech-template', () => {
       .to.eventually.be.equal(endpointUrl + '?query=' +
           encodeURIComponent(`CONSTRUCT {?s ?p ?o} FROM <${graph}> WHERE {?s ?p ?o}`))
   })
+
+  it('returns CONSTRUCT result as attachment', () => {
+    return expect(server.inject('/example1'))
+      .to.eventually.be.fulfilled
+      .to.eventually.have.deep.property(
+        'headers.content-disposition', 'attachment')
+  })
 })
