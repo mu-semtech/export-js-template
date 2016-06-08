@@ -8,6 +8,9 @@ function register (server, options, next) {
       handler: {
         'sparql': {
           type: 'construct',
+          headers: {
+            'Content-Disposition': 'attachment'
+          },
           query
         }
       },
