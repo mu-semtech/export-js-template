@@ -1,4 +1,4 @@
-FROM semtech/mu-javascript-template:latest
+FROM semtech/mu-javascript-template:0.1.0
 
 ONBUILD ADD package.json .babelrc /app/
 ONBUILD RUN npm install
