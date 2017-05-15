@@ -1,7 +1,7 @@
 import { app } from 'mu';
 import request from 'request';
 
-import queries from '/config/queries';
+import queries from '/config/export';
 
 queries.map(function(config) {
     app.get(config.path, function(req, res, next) {
@@ -23,7 +23,8 @@ queries.map(function(config) {
                 console.error(`Something went wrong executing the SPARQL query: ${JSON.stringify(error)}`);
                 next(error);
             } else if (response.statusCode == 200) {
-                if (config.file) { res.attachment(config.file); }
+                const filename = req.query.file || config.file;
+                if (filename) { res.attachment(filename); }
                 res.send(body);
             } else {
                 next(new Error(body));
