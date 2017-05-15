@@ -1,0 +1,19 @@
+{
+  "name": "mu-export-js-template",
+  "version": "0.2.0",
+  "description": "Microservice to export data using custom defined SPARQL queries",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mu-semtech/mu-export-js-template.git"
+  },
+  "keywords": [
+    "mu-semtech"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "author": "Erika Pauwels <erika.pauwels@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://mu.semte.ch"
+}
