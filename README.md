@@ -50,11 +50,13 @@ Import the `template` tag function from `/app/template.js` in your `export.js` a
 An example `export.js` file may look as follows:
 
 ```javascript
+import template from '/app/template.js';
+
 export default [
     {
         path: '/example',
         format: 'text/csv',
-        query: `SELECT * FROM <http://mu.semte.ch/application> WHERE { ?s a ${'class'} } LIMIT 100`,
+        query: template`SELECT * FROM <http://mu.semte.ch/application> WHERE { ?s a ${'class'} } LIMIT 100`,
         file: 'export-example.csv'
     },
     ...
