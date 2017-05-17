@@ -41,3 +41,25 @@ services:
 ```
 
 Note: if you extend the `semtech/mu-export-js-template` with an `export.js` file instead of mounting a volume in `/config`, the `ONBUILD` commands of the `semtech/mu-javascript-template` will not be executed in your image since `ONBUILD` is only executed one level deep.
+
+## Using variables in the export query
+You can also define variables in your SPARQL export query which will be replaced with query param values at runtime. Therefore, we use [ES6's tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals).
+
+Import the `template` tag function from `/app/template.js` in your `export.js` and apply the tag function on your query. You can then define variables in your SPARQL query using `${'myVariable'}`. At runtime the variable will be replaced with the value provided in the `myVariable` query param of the request.
+
+An example `export.js` file may look as follows:
+
+```javascript
+export default [
+    {
+        path: '/example',
+        format: 'text/csv',
+        query: `SELECT * FROM <http://mu.semte.ch/application> WHERE { ?s a ${'class'} } LIMIT 100`,
+        file: 'export-example.csv'
+    },
+    ...
+];
+
+```
+
+A GET request on `/example?class=<http://xmlns.com/foaf/0.1/Person>` will export the first 100 URIs of type `foaf:Person`.

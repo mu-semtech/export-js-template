@@ -14,7 +14,8 @@ queries.map(function(config) {
             },
             qs: {
                 format: config.format,
-                query: config.query
+                // replace placeholders in query with query params if it's a template
+                query: typeof(config.query) === 'string' ? config.query : config.query(req.query)
             }
         };
         
