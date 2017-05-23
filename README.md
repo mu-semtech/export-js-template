@@ -4,16 +4,13 @@ Export service
 Microservice to export data using custom defined SPARQL queries.
 
 ## Using the template
-Extend `semtech/mu-export-service` service and add an export configuration in `/config/export.js`.
+Extend `semtech/mu-export-service` and provide an export configuration in `export.js`.
 
 ## Example Dockerfile
 
 ```
 FROM semtech/mu-export-service:0.3.0
 MAINTAINER Erika Pauwels <erika.pauwels@gmail.com>
-
-COPY export.js /config/export.js
-
 ```
 
 ## Export configuration
@@ -33,7 +30,7 @@ export default [
 
 ```
 
-An export configuration object consists of the following properties:
+Each element in the array will become an API endpoint in the microservice. An export configuration object consists of the following properties:
 * [REQUIRED] `path`: endpoint on which the export will be exposed
 * [REQUIRED] `format`: format of the export (`application/json`, `text/csv`, `text/turtle`, etc.)
 * [REQUIRED] `query`: the SPARQL query to execute. This may be a `SELECT` or a `CONSTRUCT` query.
