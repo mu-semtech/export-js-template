@@ -39,7 +39,10 @@ Each element in the array will become an API endpoint in the microservice. An ex
 ## Using variables in the export query
 You can also define variables in your SPARQL export query which will be replaced with query param values at runtime. Therefore, we use [ES6's tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals).
 
-Import the `template` tag function from `/app/template.js` in your `export.js` and apply the tag function on your query. You can then define variables in your SPARQL query using `${['myVariable', 'type']}`. `myVariable` is the name of the variable that must be replaced. `type` is the datatype of the variable. This must be one of `'string'`, `'uri'`, `'int'`, `'float'`, `'date'`, `'dateTime'`, `'bool'`. At runtime the variable will be replaced with the value provided in the `myVariable` query param of the request.
+Import the `template` tag function from `/app/template.js` in your `export.js` and apply the tag function on your query. You can then define variables in your SPARQL query using `${['myVariable', 'type']}`.
+* `myVariable` is the name of the variable that must be replaced.
+* `type` is the datatype of the variable. This must be one of `'string'`, `'uri'`, `'int'`, `'float'`, `'date'`, `'dateTime'`, `'bool'`.
+At runtime the variable will be replaced with the value provided in the `myVariable` query param of the request.
 
 An example `export.js` including variables file may look as follows:
 
@@ -50,7 +53,7 @@ export default [
     {
         path: '/example',
         format: 'text/csv',
-        query: template`SELECT * FROM <http://mu.semte.ch/application> WHERE { ?s a ${'class'} } LIMIT 100`,
+        query: template`SELECT * FROM <http://mu.semte.ch/application> WHERE { ?s a ${['class', 'uri']} } LIMIT 100`,
         file: 'export-example.csv'
     },
     ...
@@ -58,7 +61,7 @@ export default [
 
 ```
 
-A GET request on `/example?class=<http://xmlns.com/foaf/0.1/Person>` will export the first 100 URIs of type `foaf:Person`.
+A GET request on `/example?class=http://xmlns.com/foaf/0.1/Person` will export the first 100 URIs of type `foaf:Person`.
 
 ## Example docker-compose
 If you don't want to build a new Docker image you can also run `semtech/mu-export-service` and mount your export configuration in `/config`.
@@ -67,7 +70,7 @@ If you don't want to build a new Docker image you can also run `semtech/mu-expor
 version: '2',
 services:
   export:
-    image: semtech/mu-export-service:0.3.0
+    image: semtech/mu-export-service:1.0.0
     volumes:
       - ./:/config
     links:
