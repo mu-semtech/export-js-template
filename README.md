@@ -9,7 +9,7 @@ Extend `semtech/mu-export-service` and provide an export configuration in `expor
 ## Example Dockerfile
 
 ```
-FROM semtech/mu-export-service:0.3.0
+FROM semtech/mu-export-service:1.0.0
 MAINTAINER Erika Pauwels <erika.pauwels@gmail.com>
 ```
 
